@@ -2,10 +2,12 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
 const apiRoutes = require('./routes/api');
-
+const cors = require('cors');
 dotenv.config();
+
 const app = express();
 const PORT = process.env.PORT || 3000;
+app.use(cors());
 
 // Middleware to parse JSON request bodies
 app.use(bodyParser.json());
@@ -22,3 +24,4 @@ app.get('/', (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
+
