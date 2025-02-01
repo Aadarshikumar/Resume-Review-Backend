@@ -1,11 +1,10 @@
 const fs = require('fs');
 const path = require('path');
 const ResumeService = require('../services/resumeService');
+const AtsScoreForDifferentTypeResumes = require('../utils/atsScoreForDifferentTypeResumes');
 
 const evaluationController = {
   uploadResume: async (req, res) => {
-    // console.log('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaa')
-    // console.log('Request file:', req.file);
     if (!req.file) {
       return res.status(400).json({ error: 'No file uploaded.' });
     }
@@ -35,6 +34,39 @@ const evaluationController = {
       }
     }
   },
+
+
+  // Create a functions that will handle the resumes with format pdf, docx, doc and return the extracted text
+  uploadResumeWithDiff: async (req, res) => {
+    if (!req.file) {
+      return res.status(400).json({ error: 'No file uploaded.' });
+    }
+
+    try {
+      // Step 1: Extract text from the uploaded resume
+      const resumeText = await ResumeService.extractTextFromResumeWithDiff(req.file.path);
+
+      // call the function send the resumeText as a parameter 
+      const atsScore = await AtsScoreForDifferentTypeResumes.calculateATSForDiffResume(resumeText);
+
+      console.log('atsScore:', atsScore);
+      // Step 2: Send the response
+      // res.json({ resumeText });
+      res.json({ atsScore });
+    } catch (error) {
+      console.error('Error processing resume:', error);
+      res.status(500).json({ error: error.message || 'An error occurred while processing the resume.' });
+    } finally {
+      // Step 3: Clean up the uploaded file
+      if (req.file) {
+        fs.unlinkSync(req.file.path);
+      }
+    }
+  }
+
+
 };
+
+
 
 module.exports = evaluationController;

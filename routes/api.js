@@ -8,4 +8,9 @@ const router = express.Router();
 router.post('/upload-resume', upload.single('resume'), evaluationController.uploadResume);
 // payload: resume, jobDescription
 
+
+// Route for uploading resumes and calculating ATS score
+router.post('/upload-resume-with-diff', upload.single('resume'), evaluationController.uploadResumeWithDiff);// payload resume only
+
+
 module.exports = router;
