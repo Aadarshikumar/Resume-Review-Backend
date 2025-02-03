@@ -49,7 +49,7 @@ const evaluationController = {
       // call the function send the resumeText as a parameter 
       const atsScore = await AtsScoreForDifferentTypeResumes.calculateATSForDiffResume(resumeText);
 
-      console.log('atsScore:', atsScore);
+      // console.log('atsScore:', atsScore);
       // Step 2: Send the response
       // res.json({ resumeText });
       res.json({ atsScore });
