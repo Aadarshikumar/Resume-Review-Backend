@@ -53,7 +53,7 @@ class AtsScoreForDifferentTypeResumes {
         try {
             // Step 0: Validate if the resumeText is empty or doesn't resemble a resume
             if (!resumeText || resumeText.trim().length === 0) {
-                throw new Error('The uploaded document is empty.');                
+                throw new Error('The uploaded document is empty.');
             }
 
             // Enhanced heuristic to check if the text resembles a resume
@@ -119,6 +119,7 @@ class AtsScoreForDifferentTypeResumes {
             // console.log('Analysis Result: ', analysisResult);
 
             // Step 2: Enhance the resume text based on the improvement points
+            // Step 2: Enhance the resume text based on the improvement points
             const improvementPoints = analysisResult.improvements;
             const enhancementResponse = await axios.post(
                 'https://openrouter.ai/api/v1/chat/completions',
@@ -128,13 +129,22 @@ class AtsScoreForDifferentTypeResumes {
                         {
                             role: 'user',
                             content: `The following resume text has been analyzed and the following improvement points were identified:
-                                            \n\nImprovement Points:\n${improvementPoints.join('\n')}
-                                            \n\nPlease enhance the resume text to address these improvement points. Return the enhanced text for the specific sections that need improvement.
-    
-                                            Resume Text:\n\n${resumeText}`,
+                                \n\nImprovement Points:\n${improvementPoints.join('\n')}
+                                \n\nPlease enhance the resume text to address these improvement points. Ensure the enhanced text includes all the following details:
+                                \n- Full Name
+                                \n- Contact Information (Phone Number, Email Address)
+                                \n- GitHub Profile Link
+                                \n- LinkedIn Profile Link
+                                \n- Detailed Work Experience (including quantifiable achievements)
+                                \n- Projects (with specific results and technologies used)
+                                \n- Education
+                                \n- Technical Skills
+                                \n- Soft Skills (with examples or experiences that demonstrate these qualities)
+                                \n- A summary or objective section at the beginning of the resume to provide a quick overview of skills and goals
+                                \n\nResume Text:\n\n${resumeText}`,
                         },
                     ],
-                    max_tokens: 1000, // Increase max tokens for more detailed enhancements
+                    max_tokens: 1500, // Increase max tokens for more detailed enhancements
                     temperature: 0.7, // Adjust temperature for more creative output
                 },
                 {
@@ -158,13 +168,11 @@ class AtsScoreForDifferentTypeResumes {
 
             const enhancedContent = enhancementResponse.data.choices[0].message.content.trim();
 
-
             // Return both the analysis result and the enhanced text
             return {
                 analysis: analysisResult,
                 enhancedSections: enhancedContent,
             };
-
         } catch (error) {
             console.log("Error: ", error);
             console.error('Error calculating ATS score or enhancing resume:', error.message);
