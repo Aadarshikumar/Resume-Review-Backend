@@ -115,14 +115,14 @@ class StudentController {
             const admin = await StudentService.adminLoginStatus(email, password);
 
             if (!admin) {
-                return res.status(404).json({ error: "Email or password may be incorrect, Please try again later!" });
+                return res.status(404).json({ success: false, error: "Email or password may be incorrect, Please try again later!" });
             }
 
-            res.status(200).json(admin);
+            res.status(200).json({ success: true, message: "Login successful" });
 
         } catch (error) {
             console.error("Error fetching admin:", error);
-            res.status(500).json({ error: "Internal server error" });
+            res.status(500).json({ success: false, error: "Internal server error" });
 
         }
     }
