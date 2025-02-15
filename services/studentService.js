@@ -69,16 +69,16 @@ class StudentService {
         }
     };
 
-    static async assignTeacherToStudents(id, assigned_to) {
+    static async assignTeacherToStudents(id, assigned_to, interview_scheduled_at) {
         try {
             const query = `
                 UPDATE request 
-                SET status = $1, assigned_to = $2 
-                WHERE id = $3 
+                SET status = $1, assigned_to = $2, interview_scheduled_at = $3 
+                WHERE id = $4 
                 RETURNING *;
             `;
 
-            const values = ["assigned", assigned_to, id];
+            const values = ["confirmed", assigned_to, interview_scheduled_at, id];
             const result = await pool.query(query, values);
 
             return result.rowCount ? result.rows[0] : null;

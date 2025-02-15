@@ -83,14 +83,13 @@ class StudentController {
     static async assignTeacherToStudent(req, res) {
         try {
             const { id } = req.params;
-            const { assigned_to } = req.body;
+            const { assigned_to, interview_scheduled_at } = req.body;
 
             if (!assigned_to) {
                 return res.status(400).json({ error: "assigned_to is required" });
             }
 
-            const result = await StudentService.assignTeacherToStudents(id, assigned_to);
-
+            const result = await StudentService.assignTeacherToStudents(id, assigned_to, interview_scheduled_at);
             if (!result) {
                 return res.status(404).json({ error: "Request not found" });
             }
