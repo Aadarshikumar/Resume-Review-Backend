@@ -27,7 +27,7 @@ router.post('/students-request', StudentController.studentRequest); // Not in us
 router.get('/student/:id', StudentController.getStudentById);
 // http://localhost:3000/api/student/2
 
-
+    
 router.get('/students', StudentController.getAllStudents);
 // http://localhost:3000/api/students
 
@@ -38,7 +38,9 @@ router.get('/teachers', StudentController.getAllTeachers);
 router.put("/student-assigned/:id", StudentController.assignTeacherToStudent);
 // http://localhost:3000/api/student-assigned/12
 // {
-//     "assigned_to": "Aadarsh Kumar"
+//     "assigned_to": "Aadarsh Kumar",
+//     "interview_scheduled_at": "2025-02-20T18:30:00"
+
 // }
 
 router.post('/admin-login', StudentController.adminLogin);
